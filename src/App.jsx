@@ -1,15 +1,37 @@
 import { useState } from "react";
-import "./App.css";
 
 const App = () => {
   const [word, setWord] = useState("");
+  const [language, setLanguage] = useState("");
+  const [definition, setDefinition] = useState("");
 
-  const fetchWord = async (language) => {
+  const fetchInfo = async () => {
     const promptContent =
       language === "Swedish"
-        ? "generate a 5-letter Swedish word. only return the word"
-        : "generate a 5-letter English word. only return the word";
+        ? `ge en ledtråd till det svenska ordet utan att avslöja ordet självt. Ordet är "${word}". Vänligen ge ledtråden endast.`
+        : `give a hard hint to the ${language} word without revealing the word itself. The word is "${word}". Please provide the hint only.`;
 
+    fetchApi(promptContent).then(setDefinition);
+  };
+
+  const fetchWord = async (language) => {
+    setLanguage(language);
+
+    const promptContent =
+      language === "Swedish"
+        ? "generara ett riktigt 5-bokstavligt svenskt ord. det måste vara ett riktigt ord på endast 5 tecken, det får inte vara en del av ett helt ord. returnera endast ordet"
+        : "generate a real 5-letter English word. only return the word";
+
+    fetchApi(promptContent).then((word) => {
+      if (word && word.replace(/[^a-zA-ZåäöÅÄÖ]/g, "").length === 5) {
+        setWord(word);
+      } else {
+        fetchWord(language);
+      }
+    });
+  };
+
+  const fetchApi = async (promptContent) => {
     const requestOptions = {
       method: "POST",
       headers: {
@@ -34,30 +56,51 @@ const App = () => {
       if (response.ok) {
         const lastMessage = data.choices[0].message;
         if (lastMessage && lastMessage.content) {
-          setWord(lastMessage.content.trim());
+          return lastMessage.content.trim();
         } else {
           console.error("No valid response in data:", data);
-          setWord("No word generated");
+          setError("No word generated");
         }
       } else {
         console.error("HTTP error", response.status, await response.text());
-        setWord("Error fetching word");
+        setError("Error fetching word");
       }
     } catch (error) {
       console.error("Error fetching word:", error);
-      setWord("Error");
+      setError("Error");
     }
   };
 
   return (
-    <div>
-      <button onClick={() => fetchWord("English")}>
-        Generate English Word
-      </button>
-      <button onClick={() => fetchWord("Swedish")}>
-        Generate Swedish Word
-      </button>
-      <p>Word: {word}</p>
+    <div className="flex flex-col w-full h-[100vh] justify-center items-center">
+      <div className="flex flex-col">
+        <div>
+          <button
+            className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer"
+            onClick={() => fetchWord("English")}
+          >
+            Generate English Word
+          </button>
+          <button
+            className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer"
+            onClick={() => fetchWord("Swedish")}
+          >
+            Generate Swedish Word
+          </button>
+        </div>
+        <p>Word: {word}</p>
+      </div>
+      <div>
+        {language && (
+          <button
+            className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer"
+            onClick={() => fetchInfo(word)}
+          >
+            Fetch Info
+          </button>
+        )}
+        <p>Definition: {definition}</p>
+      </div>
     </div>
   );
 };
