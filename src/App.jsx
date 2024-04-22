@@ -22,7 +22,9 @@ const App = () => {
     if (index < board.length - 1 && value !== "") {
       inputRefs.current[index + 1].focus();
     }
-    matchWord(word, board)
+    if (index == board.length - 1) {
+      matchWord(word, board)
+    }
   };
 
   const matchWord = (word, board) => {
@@ -97,7 +99,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-[100vh] justify-center items-center gap-10">
+    <div className="flex flex-col w-full h-[100vh] justify-center items-center gap-10 box-border bg-slate-600">
       <div className="flex flex-col">
         <div>
           <button
@@ -137,7 +139,7 @@ const App = () => {
             value={letter}
             onChange={(e) => updateBoard(index, e.target.value)}
             ref={(ref) => (inputRefs.current[index] = ref)}
-            className="w-40 h-40 m-1 text-center text-3xl"
+            className="w-20 h-20 m-1 text-center text-3xl"
           />
           ))}
         </div>
