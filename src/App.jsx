@@ -1,9 +1,34 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import KeyboardWrapper from './KeyboardWrapper.jsx'
 
 const App = () => {
+  const testword = "testa"
   const [word, setWord] = useState("");
   const [language, setLanguage] = useState("");
   const [definition, setDefinition] = useState("");
+  const [board, setBoard] = useState([]);
+  const inputRefs = useRef([]);
+
+  const initializeBoard = () => {
+    const newBoard = Array(testword.length).fill("");
+    setBoard(newBoard);
+    inputRefs.current[0].focus();
+  };
+
+  const updateBoard = (index, value) => {
+    const newBoard = [...board];
+    newBoard[index] = value.toUpperCase();
+    setBoard(newBoard);
+    if (index < board.length - 1 && value !== "") {
+      inputRefs.current[index + 1].focus();
+    }
+    matchWord(word, board)
+  };
+
+  const matchWord = (word, board) => {
+    console.log(board);
+    console.log(word);
+  }
 
   const fetchInfo = async () => {
     const promptContent =
@@ -72,7 +97,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-[100vh] justify-center items-center">
+    <div className="flex flex-col w-full h-[100vh] justify-center items-center gap-10">
       <div className="flex flex-col">
         <div>
           <button
@@ -100,6 +125,24 @@ const App = () => {
           </button>
         )}
         <p>Definition: {definition}</p>
+      </div>
+      <div className="flex flex-col w-full h-4/6 gap-5 items-center">
+        <p className="text-4xl text-center">Game Board:</p>
+        <div className="flex w-full h-2/6 bg-slate-600 justify-center">
+          {board.map((letter, index) => (
+            <input
+            key={index}
+            type="text"
+            maxLength="1"
+            value={letter}
+            onChange={(e) => updateBoard(index, e.target.value)}
+            ref={(ref) => (inputRefs.current[index] = ref)}
+            className="w-40 h-40 m-1 text-center text-3xl"
+          />
+          ))}
+        </div>
+        <button className="text-4xl bg-slate-400 w-1/6" onClick={initializeBoard}>Start Game</button>
+        <KeyboardWrapper></KeyboardWrapper>
       </div>
     </div>
   );
