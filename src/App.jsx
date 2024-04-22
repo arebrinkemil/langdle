@@ -9,6 +9,7 @@ const App = () => {
   const [inputArray, setInputArray] = useState([]);
   const [guesses, setGuesses] = useState([]);
   const [input, setInput] = useState("");
+  const [colorArray, setColorArray] = useState([]);
 
   const fetchInfo = async () => {
     const promptContent =
@@ -44,8 +45,6 @@ const App = () => {
       checkMatch(guesses[guesses.length - 1]); // Check the latest guess
     }
   }, [guesses]);
-  
-  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -55,15 +54,16 @@ const App = () => {
   };
 
   const checkMatch = (guess) => {
-    guess.forEach((guessLetter, index) => {
+    const newColorArray = guess.map((guessLetter, index) => {
       if (guessLetter === wordArray[index]) {
-        console.log("green");
+        return "green";
       } else if (wordArray.includes(guessLetter)) {
-        console.log("yellow");
+        return "yellow";
       } else {
-        console.log("black");
+        return "black";
       }
     });
+    setColorArray([...colorArray, newColorArray]);
   };
 
   const fetchApi = async (promptContent) => {
@@ -132,7 +132,9 @@ const App = () => {
           onChange={(e) => setInput(e.target.value)}
           maxLength={5}
         />
-        <button className=" text-white" type="submit">Submit</button>
+        <button className=" text-white" type="submit">
+          Submit
+        </button>
       </form>
       <div>
         {language && (
@@ -150,7 +152,15 @@ const App = () => {
           {guesses.map((guess, guessIndex) => (
             <div key={guessIndex} className="flex w-full h-1/6 gap-3">
               {guess.map((letter, index) => (
-                <div key={index} className="flex w-1/6 h-full items-center justify-center bg-gray-700">
+                <div
+                  key={index}
+                  className="flex w-1/6 h-full items-center justify-center"
+                  style={{
+                    backgroundColor: colorArray[guessIndex]
+                      ? colorArray[guessIndex][index]
+                      : "transparent",
+                  }}
+                >
                   <h2 className="text-5xl">{letter}</h2>
                 </div>
               ))}
