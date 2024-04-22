@@ -2,12 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import KeyboardWrapper from "./KeyboardWrapper.jsx";
 
 const App = () => {
-  const testword = "testa";
   const [word, setWord] = useState("");
   const [language, setLanguage] = useState("");
   const [definition, setDefinition] = useState("");
   const [wordArray, setWordArray] = useState([]);
   const [inputArray, setInputArray] = useState([]);
+  const [guesses, setGuesses] = useState([]);
   const [input, setInput] = useState("");
 
   const fetchInfo = async () => {
@@ -40,23 +40,25 @@ const App = () => {
   };
 
   useEffect(() => {
-    checkMatch();
-  }, [inputArray]);
+    if (guesses.length > 0) {
+      checkMatch(guesses[guesses.length - 1]); // Check the latest guess
+    }
+  }, [guesses]);
+  
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(input);
+    const newGuess = input.split("");
+    setGuesses([...guesses, newGuess]);
     setInput("");
-    const inputArray = input.split("");
-    setInputArray(inputArray);
-    console.log("Input:", inputArray);
   };
 
-  const checkMatch = () => {
-    inputArray.forEach((inputLetter, index) => {
-      if (inputLetter === wordArray[index]) {
+  const checkMatch = (guess) => {
+    guess.forEach((guessLetter, index) => {
+      if (guessLetter === wordArray[index]) {
         console.log("green");
-      } else if (wordArray.includes(inputLetter)) {
+      } else if (wordArray.includes(guessLetter)) {
         console.log("yellow");
       } else {
         console.log("black");
@@ -105,7 +107,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-[100vh] justify-center items-center gap-10">
+    <div className="flex flex-col w-full h-[100vh] justify-center items-center gap-10 bg-gray-900 text-white">
       <div className="flex flex-col">
         <div>
           <button
@@ -123,13 +125,14 @@ const App = () => {
         </div>
         <p>Word: {word}</p>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form className=" text-black " onSubmit={handleSubmit}>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          maxLength={5}
         />
-        <button type="submit">Submit</button>
+        <button className=" text-white" type="submit">Submit</button>
       </form>
       <div>
         {language && (
@@ -142,7 +145,18 @@ const App = () => {
         )}
         <p>Definition: {definition}</p>
       </div>
-      <div className="flex flex-col w-full h-4/6 gap-5 items-center">
+      <div className="flex flex-col w-full h-4/6 gap-5 items-center bg-gray-900">
+        <div className="flex flex-col w-2/6 h-4/5 items-center justify-start gap-2">
+          {guesses.map((guess, guessIndex) => (
+            <div key={guessIndex} className="flex w-full h-1/6 gap-3">
+              {guess.map((letter, index) => (
+                <div key={index} className="flex w-1/6 h-full items-center justify-center bg-gray-700">
+                  <h2 className="text-5xl">{letter}</h2>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
         <KeyboardWrapper></KeyboardWrapper>
       </div>
     </div>
