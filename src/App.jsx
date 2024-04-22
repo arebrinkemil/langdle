@@ -1,34 +1,14 @@
-import { useState, useRef } from "react";
-import KeyboardWrapper from './KeyboardWrapper.jsx'
+import { useState, useRef, useEffect } from "react";
+import KeyboardWrapper from "./KeyboardWrapper.jsx";
 
 const App = () => {
-  const testword = "testa"
+  const testword = "testa";
   const [word, setWord] = useState("");
   const [language, setLanguage] = useState("");
   const [definition, setDefinition] = useState("");
-  const [board, setBoard] = useState([]);
-  const inputRefs = useRef([]);
-
-  const initializeBoard = () => {
-    const newBoard = Array(testword.length).fill("");
-    setBoard(newBoard);
-    inputRefs.current[0].focus();
-  };
-
-  const updateBoard = (index, value) => {
-    const newBoard = [...board];
-    newBoard[index] = value.toUpperCase();
-    setBoard(newBoard);
-    if (index < board.length - 1 && value !== "") {
-      inputRefs.current[index + 1].focus();
-    }
-    matchWord(word, board)
-  };
-
-  const matchWord = (word, board) => {
-    console.log(board);
-    console.log(word);
-  }
+  const [wordArray, setWordArray] = useState([]);
+  const [inputArray, setInputArray] = useState([]);
+  const [input, setInput] = useState("");
 
   const fetchInfo = async () => {
     const promptContent =
@@ -50,8 +30,36 @@ const App = () => {
     fetchApi(promptContent).then((word) => {
       if (word && word.replace(/[^a-zA-ZåäöÅÄÖ]/g, "").length === 5) {
         setWord(word);
+        const wordArray = word.split("");
+        setWordArray(wordArray);
+        console.log("Word:", wordArray);
       } else {
         fetchWord(language);
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkMatch();
+  }, [inputArray]);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(input);
+    setInput("");
+    const inputArray = input.split("");
+    setInputArray(inputArray);
+    console.log("Input:", inputArray);
+  };
+
+  const checkMatch = () => {
+    inputArray.forEach((inputLetter, index) => {
+      if (inputLetter === wordArray[index]) {
+        console.log("green");
+      } else if (wordArray.includes(inputLetter)) {
+        console.log("yellow");
+      } else {
+        console.log("black");
       }
     });
   };
@@ -115,6 +123,14 @@ const App = () => {
         </div>
         <p>Word: {word}</p>
       </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+        <button type="submit">Submit</button>
+      </form>
       <div>
         {language && (
           <button
@@ -127,21 +143,6 @@ const App = () => {
         <p>Definition: {definition}</p>
       </div>
       <div className="flex flex-col w-full h-4/6 gap-5 items-center">
-        <p className="text-4xl text-center">Game Board:</p>
-        <div className="flex w-full h-2/6 bg-slate-600 justify-center">
-          {board.map((letter, index) => (
-            <input
-            key={index}
-            type="text"
-            maxLength="1"
-            value={letter}
-            onChange={(e) => updateBoard(index, e.target.value)}
-            ref={(ref) => (inputRefs.current[index] = ref)}
-            className="w-40 h-40 m-1 text-center text-3xl"
-          />
-          ))}
-        </div>
-        <button className="text-4xl bg-slate-400 w-1/6" onClick={initializeBoard}>Start Game</button>
         <KeyboardWrapper></KeyboardWrapper>
       </div>
     </div>
