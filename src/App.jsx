@@ -10,6 +10,7 @@ const App = () => {
   const [guesses, setGuesses] = useState([]);
   const [input, setInput] = useState("");
   const [colorArray, setColorArray] = useState([]);
+  const [correct, setCorrect] = useState(0);
 
   const fetchInfo = async () => {
     const promptContent =
@@ -42,20 +43,39 @@ const App = () => {
 
   useEffect(() => {
     if (guesses.length > 0) {
-      checkMatch(guesses[guesses.length - 1]); // Check the latest guess
+      checkMatch(guesses[guesses.length - 1]);
     }
   }, [guesses]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newGuess = input.split("");
-    setGuesses([...guesses, newGuess]);
+    if (guesses.length < 6) {
+      const newGuess = input.split("");
+      setGuesses([...guesses, newGuess]);
+      setInput("");
+    } else {
+      console.log("You have reached the maximum number of guesses");
+      clearGame();
+    }
+  };
+
+  const clearGame = () => {
+    setWord("");
+    setLanguage("");
+    setDefinition("");
+    setWordArray([]);
+    setInputArray([]);
+    setGuesses([]);
     setInput("");
+    setColorArray([]);
+    setCorrect(0);
   };
 
   const checkMatch = (guess) => {
+    setCorrect(0);
     const newColorArray = guess.map((guessLetter, index) => {
       if (guessLetter === wordArray[index]) {
+        setCorrect((correct) => correct + 1);
         return "green";
       } else if (wordArray.includes(guessLetter)) {
         return "yellow";
@@ -64,6 +84,11 @@ const App = () => {
       }
     });
     setColorArray([...colorArray, newColorArray]);
+
+    if (newColorArray.every((color) => color === "green")) {
+      console.log("You win!");
+      clearGame();
+    }
   };
 
   const fetchApi = async (promptContent) => {
@@ -123,19 +148,22 @@ const App = () => {
             Generate Swedish Word
           </button>
         </div>
-        <p>Word: {word}</p>
+        <p>Word:</p>
       </div>
-      <form className=" text-black " onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          maxLength={5}
-        />
-        <button className=" text-white" type="submit">
-          Submit
-        </button>
-      </form>
+      {word && (
+        <form className=" text-black " onSubmit={handleSubmit}>
+          <input
+            autoFocus
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            maxLength={5}
+          />
+          <button className=" text-white" type="submit">
+            Submit
+          </button>
+        </form>
+      )}
       <div>
         {language && (
           <button
