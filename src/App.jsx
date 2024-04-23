@@ -80,7 +80,7 @@ const App = () => {
       } else if (wordArray.includes(guessLetter)) {
         return "yellow";
       } else {
-        return "black";
+        return "gray";
       }
     });
     setColorArray([...colorArray, newColorArray]);
@@ -151,15 +151,15 @@ const App = () => {
         <p>Word:</p>
       </div>
       {word && (
-        <form className=" text-black " onSubmit={handleSubmit}>
-          <input
+        <form className=" flex gap-5 text-black " onSubmit={handleSubmit}>
+          <input className=" h-16 w-full text-2xl"
             autoFocus
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             maxLength={5}
           />
-          <button className=" text-white" type="submit">
+          <button className=" text-2xl bg-lime-600 rounded-full px-5 py-1 text-white" type="submit">
             Submit
           </button>
         </form>
@@ -178,7 +178,7 @@ const App = () => {
           </>
         )}
       </div>
-      <div className="flex flex-col w-full h-4/6 gap-5 items-center bg-gray-900">
+      <div className="flex flex-col w-full h-4/6 gap-5 items-center bg-gray-900 text-stone-200">
         <div className="flex flex-col w-2/6 h-4/5 items-center justify-start gap-2">
           {guesses.map((guess, guessIndex) => (
             <div key={guessIndex} className="flex w-full h-1/6 gap-3">
