@@ -72,7 +72,7 @@ const Game = ({ GameScore }) => {
     setInput("");
     setColorArray([]);
     setCorrect(0);
-    setScore(0);
+    setScore(120);
   };
 
   const checkMatch = (guess) => {
@@ -91,8 +91,13 @@ const Game = ({ GameScore }) => {
 
     if (newColorArray.every((color) => color === "green")) {
       console.log("You win!");
-      setScore(Math.round(score / guesses.length));
-      GameScore(score);
+
+      console.log("Guesses:", guesses.length);
+      const finalScore = 120 - guesses.length * 20;
+      setScore(finalScore);
+
+      console.log("Score:", finalScore);
+      GameScore(finalScore);
       clearGame();
     }
   };
