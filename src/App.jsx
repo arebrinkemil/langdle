@@ -4,8 +4,9 @@ import Modal from "./Modal";
 
 const App = () => {
   const [displayModal, setDisplayModal] = useState(false);
-  const [totalScore, setTotalScore] = useState(0);
-
+  const [totalScore, setTotalScore] = useState(
+    Number(sessionStorage.getItem("totalScore")) || 0
+  );
   useEffect(() => {
     const timer = setTimeout(() => {
       setDisplayModal(true);
@@ -15,7 +16,9 @@ const App = () => {
   }, []);
 
   const handleScore = (score) => {
-    setTotalScore(score + totalScore);
+    const newTotalScore = score + totalScore;
+    setTotalScore(newTotalScore);
+    sessionStorage.setItem("totalScore", newTotalScore);
   };
 
   return (

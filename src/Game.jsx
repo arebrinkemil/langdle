@@ -12,12 +12,13 @@ const Game = ({ GameScore }) => {
   const [colorArray, setColorArray] = useState([]);
   const [correct, setCorrect] = useState(0);
   const [score, setScore] = useState(120);
+  const [letterColorMap, setLetterColorMap] = useState({});
 
   const insertLetter = (letter) => {
-    if( input.length < 5 ) {
+    if (input.length < 5) {
       setInput(input + letter);
     }
-  }
+  };
 
   const fetchInfo = async () => {
     const promptContent =
@@ -40,8 +41,9 @@ const Game = ({ GameScore }) => {
 
     fetchApi(promptContent).then((word) => {
       if (word && word.replace(/[^a-zA-ZåäöÅÄÖ]/g, "").length === 5) {
-        setWord(word);
-        const wordArray = word.split("");
+        const upperCaseWord = word.toUpperCase();
+        setWord(upperCaseWord);
+        const wordArray = upperCaseWord.split("");
         setWordArray(wordArray);
         console.log("Word:", wordArray);
       } else {
@@ -79,21 +81,31 @@ const Game = ({ GameScore }) => {
     setColorArray([]);
     setCorrect(0);
     setScore(120);
+    setLetterColorMap({});
   };
 
   const checkMatch = (guess) => {
     setCorrect(0);
+    let newLetterColorMap = { ...letterColorMap };
     const newColorArray = guess.map((guessLetter, index) => {
       if (guessLetter === wordArray[index]) {
         setCorrect((correct) => correct + 1);
+        newLetterColorMap[guessLetter] = "green";
         return "green";
       } else if (wordArray.includes(guessLetter)) {
+        if (newLetterColorMap[guessLetter] !== "green") {
+          newLetterColorMap[guessLetter] = "yellow";
+        }
         return "yellow";
       } else {
+        if (newLetterColorMap[guessLetter] !== "green") {
+          newLetterColorMap[guessLetter] = "gray";
+        }
         return "gray";
       }
     });
     setColorArray([...colorArray, newColorArray]);
+    setLetterColorMap(newLetterColorMap);
 
     if (newColorArray.every((color) => color === "green")) {
       console.log("You win!");
@@ -172,8 +184,8 @@ const Game = ({ GameScore }) => {
             className=" h-16 w-full text-2xl"
             autoFocus
             type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
+            value={input.toUpperCase()}
+            onChange={(e) => setInput(e.target.value.toUpperCase())}
             maxLength={5}
           />
           <button
@@ -218,7 +230,10 @@ const Game = ({ GameScore }) => {
             </div>
           ))}
         </div>
-        <KeyboardWrapper insertLetter={insertLetter}></KeyboardWrapper>
+        <KeyboardWrapper
+          insertLetter={insertLetter}
+          letterColorMap={letterColorMap}
+        />
       </div>
     </div>
   );
