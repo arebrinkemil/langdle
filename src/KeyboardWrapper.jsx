@@ -9,7 +9,7 @@ function KeyboardWrapper( {insertLetter} ) {
   }
 
   return (
-    <div className="flex flex-wrap h-2/5 w-2/4 gap-3 text-center">
+    <div className="flex flex-wrap h-2/5 w-full lg:w-3/6 justify-center gap-3 text-center">
       {letterArray.map((letter, index) => (
         <button
           onClick={() => inputToInputField(letter)} 

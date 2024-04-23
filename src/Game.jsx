@@ -199,13 +199,13 @@ const Game = ({ GameScore }) => {
         )}
       </div>
       <div className="flex flex-col w-full h-4/6 gap-5 items-center bg-gray-900 text-stone-200">
-        <div className="flex flex-col w-2/6 h-4/5 items-center justify-start gap-2">
+        <div className="flex flex-col w-80 h-4/5 items-center justify-start gap-2">
           {guesses.map((guess, guessIndex) => (
-            <div key={guessIndex} className="flex w-full h-1/6 gap-3">
+            <div key={guessIndex} className="flex w-full gap-3 justify-center">
               {guess.map((letter, index) => (
                 <div
                   key={index}
-                  className="flex w-1/6 h-full items-center justify-center"
+                  className="flex h-24 w-32 items-center justify-center"
                   style={{
                     backgroundColor: colorArray[guessIndex]
                       ? colorArray[guessIndex][index]
