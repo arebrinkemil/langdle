@@ -14,10 +14,10 @@ const Game = ({ GameScore }) => {
   const [score, setScore] = useState(120);
 
   const insertLetter = (letter) => {
-    if( input.length < 5 ) {
+    if (input.length < 5) {
       setInput(input + letter);
     }
-  }
+  };
 
   const fetchInfo = async () => {
     const promptContent =
@@ -40,8 +40,9 @@ const Game = ({ GameScore }) => {
 
     fetchApi(promptContent).then((word) => {
       if (word && word.replace(/[^a-zA-ZåäöÅÄÖ]/g, "").length === 5) {
-        setWord(word);
-        const wordArray = word.split("");
+        const upperCaseWord = word.toUpperCase();
+        setWord(upperCaseWord);
+        const wordArray = upperCaseWord.split("");
         setWordArray(wordArray);
         console.log("Word:", wordArray);
       } else {
