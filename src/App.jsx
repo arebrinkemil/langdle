@@ -164,16 +164,19 @@ const App = () => {
           </button>
         </form>
       )}
-      <div>
+      <div className="flex flex-row">
         {language && (
-          <button
-            className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer"
-            onClick={() => fetchInfo(word)}
-          >
-            Fetch Info
-          </button>
+          <>
+            <p>Need a hint?</p>
+            <button
+              className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer"
+              onClick={() => fetchInfo(word)}
+            >
+              Fetch Info
+            </button>
+            <p>Definition: {definition}</p>
+          </>
         )}
-        <p>Definition: {definition}</p>
       </div>
       <div className="flex flex-col w-full h-4/6 gap-5 items-center bg-gray-900">
         <div className="flex flex-col w-2/6 h-4/5 items-center justify-start gap-2">
