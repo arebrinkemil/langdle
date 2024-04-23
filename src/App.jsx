@@ -12,6 +12,12 @@ const App = () => {
   const [colorArray, setColorArray] = useState([]);
   const [correct, setCorrect] = useState(0);
 
+  const insertLetter = (letter) => {
+    if( input.length < 5 ) {
+      setInput(input + letter);
+    }
+  }
+
   const fetchInfo = async () => {
     const promptContent =
       language === "Swedish"
@@ -198,7 +204,7 @@ const App = () => {
             </div>
           ))}
         </div>
-        <KeyboardWrapper></KeyboardWrapper>
+        <KeyboardWrapper insertLetter={insertLetter}></KeyboardWrapper>
       </div>
     </div>
   );
