@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import KeyboardWrapper from "./KeyboardWrapper.jsx";
 
-const Game = () => {
+const Game = ({ GameScore }) => {
   const [word, setWord] = useState("");
   const [language, setLanguage] = useState("");
   const [definition, setDefinition] = useState("");
@@ -11,6 +11,7 @@ const Game = () => {
   const [input, setInput] = useState("");
   const [colorArray, setColorArray] = useState([]);
   const [correct, setCorrect] = useState(0);
+  const [score, setScore] = useState(120);
 
   const fetchInfo = async () => {
     const promptContent =
@@ -19,6 +20,8 @@ const Game = () => {
         : `give a hard hint to the ${language} word without revealing the word itself. The word is "${word}". Please provide the hint only.`;
 
     fetchApi(promptContent).then(setDefinition);
+    setScore(score - 20);
+    console.log("Score:", score);
   };
 
   const fetchWord = async (language) => {
@@ -69,6 +72,7 @@ const Game = () => {
     setInput("");
     setColorArray([]);
     setCorrect(0);
+    setScore(0);
   };
 
   const checkMatch = (guess) => {
@@ -87,6 +91,8 @@ const Game = () => {
 
     if (newColorArray.every((color) => color === "green")) {
       console.log("You win!");
+      setScore(Math.round(score / guesses.length));
+      GameScore(score);
       clearGame();
     }
   };
