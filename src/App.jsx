@@ -20,16 +20,26 @@ const App = () => {
     setTotalScore(newTotalScore);
     sessionStorage.setItem("totalScore", newTotalScore);
   };
+  const resetScore = () => {
+    setTotalScore(0);
+    sessionStorage.setItem("totalScore", 0);
+  };
 
   return (
     <div className="flex relative flex-col items-center justify-center w-full min-h-[100vh] md:h-[100vh] bg-gray-900 text-white">
-      <h2 className=" absolute top-3 right-5 text-xs md:text-lg lg:text-2xl">
+      <button
+        className="absolute top-3 left-5 text-xs md:text-lg lg:text-2xl"
+        onClick={resetScore}
+      >
+        Reset Score
+      </button>
+      <h2 className="absolute top-3 right-5 text-xs md:text-lg lg:text-2xl">
         Score: {totalScore}
       </h2>
-      <h1 className=" absolute top-3 right-50% text-2xl lg:text-4xl">
-        LANGDLE
-      </h1>
-      <Game GameScore={handleScore} />
+      <h1 className="absolute top-3 right-50% text-2xl lg:text-4xl">LANGDLE</h1>
+      <div className="h-5/6">
+        <Game GameScore={handleScore} />
+      </div>
       <Modal isOpen={displayModal} onClose={() => setDisplayModal(false)} />
     </div>
   );

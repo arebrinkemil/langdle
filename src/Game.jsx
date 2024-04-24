@@ -165,9 +165,11 @@ const Game = ({ GameScore }) => {
   };
 
   return (
-    <div className="flex flex-col w-full justify-center items-center gap-10 ">
-      {gameStatus === "win" && <div>You win!</div>}
-      {gameStatus === "lose" && <div>You lose!</div>}
+    <div className="flex flex-col w-full justify-center items-center gap-10 h-full">
+      <div className="fixed font-bold text-3xl">
+        {gameStatus === "win" && <div>You win!</div>}
+        {gameStatus === "lose" && <div>You lose!</div>}
+      </div>
       <div className="flex flex-col">
         <div>
           {!gameStarted && (
@@ -195,9 +197,9 @@ const Game = ({ GameScore }) => {
         </div>
       </div>
       {word && (
-        <form className="flex gap-5 text-black px-5" onSubmit={handleSubmit}>
+        <form className=" flex gap-5 text-black px-5" onSubmit={handleSubmit}>
           <input
-            className="h-10 w-full text-xl"
+            className="md:hidden h-10 w-full text-xl"
             autoFocus
             type="text"
             value={input.toUpperCase()}
@@ -205,31 +207,42 @@ const Game = ({ GameScore }) => {
             maxLength={5}
             readOnly
           />
+          <input
+            className="hidden md:flex h-10 w-full text-xl"
+            autoFocus
+            type="text"
+            value={input.toUpperCase()}
+            onChange={(e) => setInput(e.target.value.toUpperCase())}
+            maxLength={5}
+          />
           <button
             className="text-base bg-lime-600 rounded-md px-3 py-0 text-white lg:text-lg lg:px-3 hover:bg-lime-700"
             type="submit"
           >
-            HINT
+            SEND
           </button>
-          <p>{definition}</p>
         </form>
       )}
       <div className="flex flex-row items-center px-3 md:px-0">
         {language && (
           <>
-            <p>Need a hint?</p>
-            <button
-              className="text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
-              onClick={() => fetchInfo(word)}
-            >
-              Fetch Info
-            </button>
-            <p className="text-center">Definition: {definition}</p>
+            <div>
+              <div className="flex flex-row w-full justify-center items-center">
+                <p>Need a hint?</p>
+                <button
+                  className="text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
+                  onClick={() => fetchInfo(word)}
+                >
+                  Fetch Info
+                </button>
+              </div>
+              <p className="text-center">Definition: {definition}</p>
+            </div>
           </>
         )}
       </div>
 
-      <div className="flex flex-col w-full h-full gap-5 items-center bg-gray-900 text-stone-200">
+      <div className="flex flex-col w-full h-full md:max-h-[70vh] gap-5 items-center bg-gray-900 text-stone-200">
         <div className="flex flex-col w-80 h-4/5 items-center justify-start gap-2">
           {guesses.map((guess, guessIndex) => (
             <div key={guessIndex} className="flex w-full gap-3 justify-center">
