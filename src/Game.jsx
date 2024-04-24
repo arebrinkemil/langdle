@@ -195,9 +195,9 @@ const Game = ({ GameScore }) => {
         </div>
       </div>
       {word && (
-        <form className=" flex gap-5 text-black " onSubmit={handleSubmit}>
+        <form className="flex gap-5 text-black px-5" onSubmit={handleSubmit}>
           <input
-            className=" h-16 w-full text-2xl lg:text-xl lg:h-10"
+            className="h-10 w-full text-xl"
             autoFocus
             type="text"
             value={input.toUpperCase()}
@@ -205,27 +205,29 @@ const Game = ({ GameScore }) => {
             maxLength={5}
           />
           <button
-            className=" text-2xl bg-lime-600 rounded-md px-5 py-1 text-white lg:text-lg lg:px-3 hover:bg-lime-700 "
+            className="text-base bg-lime-600 rounded-md px-3 py-0 text-white lg:text-lg lg:px-3 hover:bg-lime-700"
             type="submit"
           >
-            Submit
+            HINT
           </button>
+          <p>{definition}</p>
         </form>
       )}
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center px-3 md:px-0">
         {language && (
           <>
             <p>Need a hint?</p>
             <button
-              className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
+              className="text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
               onClick={() => fetchInfo(word)}
             >
-              HINT
+              Fetch Info
             </button>
-            <p>{definition}</p>
+            <p className="text-center">Definition: {definition}</p>
           </>
         )}
       </div>
+
       <div className="flex flex-col w-full h-full gap-5 items-center bg-gray-900 text-stone-200">
         <div className="flex flex-col w-80 h-4/5 items-center justify-start gap-2">
           {guesses.map((guess, guessIndex) => (
@@ -233,7 +235,7 @@ const Game = ({ GameScore }) => {
               {guess.map((letter, index) => (
                 <div
                   key={index}
-                  className="flex h-24 w-32 items-center justify-center lg:h-10 lg:w-10 lg:text-sm"
+                  className="flex h-12 w-10 items-center justify-center lg:h-14 lg:w-10 lg:text-2xl"
                   style={{
                     backgroundColor: colorArray[guessIndex]
                       ? colorArray[guessIndex][index]
@@ -245,7 +247,7 @@ const Game = ({ GameScore }) => {
                         : "inherit",
                   }}
                 >
-                  <h2 className="text-4xl lg:text-base">{letter}</h2>
+                  <h2 className="text-xl lg:text-2xl">{letter}</h2>
                 </div>
               ))}
             </div>
