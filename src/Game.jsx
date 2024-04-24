@@ -75,7 +75,7 @@ const Game = ({ GameScore }) => {
       setInput("");
     } else {
       setGameStatus("lose");
-      setTimeout(clearGame, 5000); // Delay clearGame by 5 seconds
+      setTimeout(clearGame, 5000);
     }
   };
 
@@ -203,6 +203,7 @@ const Game = ({ GameScore }) => {
             value={input.toUpperCase()}
             onChange={(e) => setInput(e.target.value.toUpperCase())}
             maxLength={5}
+            readOnly
           />
           <button
             className="text-base bg-lime-600 rounded-md px-3 py-0 text-white lg:text-lg lg:px-3 hover:bg-lime-700"

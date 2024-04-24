@@ -22,9 +22,13 @@ const App = () => {
   };
 
   return (
-    <div className="flex relative flex-col items-center justify-center w-full h-[100vh] bg-gray-900 text-white">
-      <h2 className=" absolute top-3 right-5 text-xs md:text-lg lg:text-2xl">Score: {totalScore}</h2>
-      <h1 className=" absolute top-3 right-50% text-2xl lg:text-4xl">LANGDLE</h1>
+    <div className="flex relative flex-col items-center justify-center w-full min-h-[100vh] md:h-[100vh] bg-gray-900 text-white">
+      <h2 className=" absolute top-3 right-5 text-xs md:text-lg lg:text-2xl">
+        Score: {totalScore}
+      </h2>
+      <h1 className=" absolute top-3 right-50% text-2xl lg:text-4xl">
+        LANGDLE
+      </h1>
       <Game GameScore={handleScore} />
       <Modal isOpen={displayModal} onClose={() => setDisplayModal(false)} />
     </div>
