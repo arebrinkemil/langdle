@@ -14,6 +14,7 @@ const Game = ({ GameScore }) => {
   const [score, setScore] = useState(120);
   const [letterColorMap, setLetterColorMap] = useState({});
   const [gameStarted, setGameStarted] = useState(false);
+  const [gameStatus, setGameStatus] = useState(null);
 
   const insertLetter = (letter) => {
     if (input.length < 5) {
@@ -88,6 +89,7 @@ const Game = ({ GameScore }) => {
     setScore(120);
     setLetterColorMap({});
     setGameStarted(false);
+    setGameStatus(null);
   };
 
   const checkMatch = (guess) => {
@@ -104,25 +106,28 @@ const Game = ({ GameScore }) => {
         }
         return "yellow";
       } else {
-        if (newLetterColorMap[guessLetter] !== "green") {
-          newLetterColorMap[guessLetter] = "gray";
-        }
+        newLetterColorMap[guessLetter] = "gray";
         return "gray";
       }
     });
+
     setColorArray([...colorArray, newColorArray]);
     setLetterColorMap(newLetterColorMap);
 
     if (newColorArray.every((color) => color === "green")) {
-      console.log("You win!");
-
-      console.log("Guesses:", guesses.length);
+      setGameStatus("win");
       const finalScore = 120 - guesses.length * 20;
       setScore(finalScore);
-
-      console.log("Score:", finalScore);
       GameScore(finalScore);
-      clearGame();
+
+      setTimeout(() => {
+        clearGame();
+      }, 5000);
+    } else if (guesses.length >= 6) {
+      setGameStatus("lose");
+      setTimeout(() => {
+        clearGame();
+      }, 5000);
     }
   };
 
@@ -170,7 +175,16 @@ const Game = ({ GameScore }) => {
     <div className="flex flex-col w-full justify-center items-center gap-10 ">
       <div className="flex flex-col">
         <div>
-        {!gameStarted && (
+          <div className="game-status">
+            {gameStatus === "win" && (
+              <div className="win-message">Congratulations! You Win!</div>
+            )}
+            {gameStatus === "lose" && (
+              <div className="lose-message">Game Over! You Lose!</div>
+            )}
+          </div>
+
+          {!gameStarted && (
             <>
               <button
                 className="text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
@@ -195,37 +209,37 @@ const Game = ({ GameScore }) => {
         </div>
       </div>
       {word && (
-          <form className=" flex gap-5 text-black " onSubmit={handleSubmit}>
-            <input
-              className=" h-16 w-full text-2xl lg:text-xl lg:h-10"
-              autoFocus
-              type="text"
-              value={input.toUpperCase()}
-              onChange={(e) => setInput(e.target.value.toUpperCase())}
-              maxLength={5}
-            />
+        <form className=" flex gap-5 text-black " onSubmit={handleSubmit}>
+          <input
+            className=" h-16 w-full text-2xl lg:text-xl lg:h-10"
+            autoFocus
+            type="text"
+            value={input.toUpperCase()}
+            onChange={(e) => setInput(e.target.value.toUpperCase())}
+            maxLength={5}
+          />
+          <button
+            className=" text-2xl bg-lime-600 rounded-md px-5 py-1 text-white lg:text-lg lg:px-3 hover:bg-lime-700 "
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+      )}
+      <div className="flex flex-row items-center">
+        {language && (
+          <>
+            <p>Need a hint?</p>
             <button
-              className=" text-2xl bg-lime-600 rounded-md px-5 py-1 text-white lg:text-lg lg:px-3 hover:bg-lime-700 "
-              type="submit"
+              className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
+              onClick={() => fetchInfo(word)}
             >
-              Submit
+              Fetch Info
             </button>
-          </form>
+            <p>Definition: {definition}</p>
+          </>
         )}
-        <div className="flex flex-row items-center">
-          {language && (
-            <>
-              <p>Need a hint?</p>
-              <button
-                className=" text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
-                onClick={() => fetchInfo(word)}
-              >
-                Fetch Info
-              </button>
-              <p>Definition: {definition}</p>
-            </>
-          )}
-        </div>
+      </div>
       <div className="flex flex-col w-full h-full gap-5 items-center bg-gray-900 text-stone-200">
         <div className="flex flex-col w-80 h-4/5 items-center justify-start gap-2">
           {guesses.map((guess, guessIndex) => (
@@ -236,13 +250,15 @@ const Game = ({ GameScore }) => {
                   className="flex h-24 w-32 items-center justify-center lg:h-10 lg:w-10 lg:text-sm"
                   style={{
                     backgroundColor: colorArray[guessIndex]
-                        ? colorArray[guessIndex][index]
-                        : "transparent",
-                    color: colorArray[guessIndex] && colorArray[guessIndex][index] === "yellow"
+                      ? colorArray[guessIndex][index]
+                      : "transparent",
+                    color:
+                      colorArray[guessIndex] &&
+                      colorArray[guessIndex][index] === "yellow"
                         ? "gray"
-                        : "inherit"  
-                        }}
-                    >
+                        : "inherit",
+                  }}
+                >
                   <h2 className="text-4xl lg:text-base">{letter}</h2>
                 </div>
               ))}
