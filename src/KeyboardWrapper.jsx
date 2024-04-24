@@ -44,8 +44,11 @@ function KeyboardWrapper({ insertLetter, letterColorMap }) {
         <button
           onClick={() => inputToInputField(letter)}
           key={index}
-          style={{ backgroundColor: letterColorMap[letter] }}
-          className="text-center items-center justify-center flex h-20 w-1/12 text-2xl text-white"
+          style={{
+            backgroundColor: letterColorMap[letter],
+            color: letterColorMap[letter] === "yellow" ? "gray" : "white",
+          }}
+          className="text-center items-center justify-center flex h-20 w-1/12 text-2xl lg:h-10 lg:w-13 lg:text-lg text-white"
         >
           {letter}
         </button>

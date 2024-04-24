@@ -10,7 +10,7 @@ const Modal = ({ isOpen, onClose }) => {
         <div className="relative p-4 w-full max-w-2xl mx-auto bg-white rounded-lg shadow dark:bg-gray-700">
           <div className="flex justify-between items-center p-4 border-b dark:border-gray-600">
             <h3 className="text-3xl font-semibold text-gray-900 dark:text-white text-center">
-              Langdle
+              LANGDLE
             </h3>
             <button
               onClick={onClose}
