@@ -47,7 +47,6 @@ const Game = ({ GameScore }) => {
         setWord(upperCaseWord);
         const wordArray = upperCaseWord.split("");
         setWordArray(wordArray);
-        console.log("Word:", wordArray);
       } else {
         fetchWord(language);
       }
@@ -73,9 +72,11 @@ const Game = ({ GameScore }) => {
       const newGuess = input.split("");
       setGuesses([...guesses, newGuess]);
       setInput("");
+      checkMatch(newGuess);
+      setScore(score - 20);
     } else {
       setGameStatus("lose");
-      setTimeout(clearGame, 5000);
+      timeoutRef.current = setTimeout(clearGame, 5000);
     }
   };
 
@@ -120,6 +121,7 @@ const Game = ({ GameScore }) => {
 
     if (newColorArray.every((color) => color === "green")) {
       setGameStatus("win");
+      GameScore(score);
       setTimeout(clearGame, 5000);
     }
   };
@@ -233,7 +235,7 @@ const Game = ({ GameScore }) => {
                   className="text-white bg-lime-600 px-2 py-3 m-2 cursor-pointer rounded-md hover:bg-lime-700"
                   onClick={() => fetchInfo(word)}
                 >
-                  Fetch Info
+                  HINT!
                 </button>
               </div>
               <p className="text-center">Definition: {definition}</p>
