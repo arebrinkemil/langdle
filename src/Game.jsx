@@ -71,8 +71,8 @@ const Game = ({ GameScore }) => {
     if (guesses.length < 6) {
       const newGuess = input.split("");
       setGuesses([...guesses, newGuess]);
+      console.log("Guesses:", guesses);
       setInput("");
-      checkMatch(newGuess);
       setScore(score - 20);
     } else {
       setGameStatus("lose");
@@ -97,6 +97,7 @@ const Game = ({ GameScore }) => {
   };
 
   const checkMatch = (guess) => {
+    console.log(colorArray);
     setCorrect(0);
     let newLetterColorMap = { ...letterColorMap };
     const newColorArray = guess.map((guessLetter, index) => {
@@ -120,8 +121,10 @@ const Game = ({ GameScore }) => {
     setLetterColorMap(newLetterColorMap);
 
     if (newColorArray.every((color) => color === "green")) {
+      const finalScore = 120 - guesses.length * 20;
+      setScore(finalScore);
+      GameScore(finalScore);
       setGameStatus("win");
-      GameScore(score);
       setTimeout(clearGame, 5000);
     }
   };
