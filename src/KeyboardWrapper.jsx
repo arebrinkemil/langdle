@@ -39,7 +39,7 @@ function KeyboardWrapper({ insertLetter, letterColorMap }) {
   };
 
   return (
-    <div className="flex flex-wrap h-2/5 w-full lg:w-3/6 justify-center gap-3 text-center px-6 md:px-48 lg:px-0">
+    <div className="flex flex-wrap h-2/5 w-full lg:w-[45%] justify-center gap-3 text-center px-6 md:px-48 lg:px-0">
       {letterArray.map((letter, index) => (
         <button
           onClick={() => inputToInputField(letter)}
