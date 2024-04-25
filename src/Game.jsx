@@ -76,7 +76,7 @@ const Game = ({ GameScore }) => {
       setScore(score - 20);
     } else {
       setGameStatus("lose");
-      timeoutRef.current = setTimeout(clearGame, 5000);
+      setTimeout(clearGame, 5000);
     }
   };
 
@@ -168,9 +168,9 @@ const Game = ({ GameScore }) => {
 
   return (
     <div className="flex flex-col w-full justify-center items-center gap-10 h-full">
-      <div className="fixed font-bold text-3xl">
-        {gameStatus === "win" && <div>You win!</div>}
-        {gameStatus === "lose" && <div>You lose!</div>}
+      <div className="fixed font-bold text-3xl bg-slate-700">
+        {gameStatus === "win" && <div className="">You win!</div>}
+        {gameStatus === "lose" && <div className="">You lose!</div>}
       </div>
       <div className="flex flex-col">
         <div>
