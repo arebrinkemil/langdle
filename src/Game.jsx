@@ -134,7 +134,7 @@ const Game = ({ GameScore }) => {
         Authorization: `Bearer ${import.meta.env.VITE_AUTHORIZATION_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4",
         messages: [
           { role: "system", content: "You are a helpful assistant." },
           { role: "user", content: promptContent },
